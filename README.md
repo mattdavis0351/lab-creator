@@ -2,7 +2,7 @@
 
 # our cli checklist
 
-- [ ] Create the program command
+- [x] Create the program command
 - [ ] copy files from `template dir` to `cwd`
   - [ ] future state: specify dest dir
 - [ ] Template out the files in the template dir
