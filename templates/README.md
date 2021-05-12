@@ -1,4 +1,4 @@
-# Welcome to the scheduled events lab!
+# Welcome to the {{ labName }} lab!
 
 This lab is an exercise to check your knowledge on scheduled events. It is automatically graded via a workflow once you have completed the instructions.
 
