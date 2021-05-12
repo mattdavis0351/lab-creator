@@ -1,0 +1,27 @@
+{
+  "name": "lab-creator",
+  "version": "0.0.1",
+  "description": "scaffold github hands on labs",
+  "main": "index.js",
+  "bin": {
+    "lab-creator": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattdavis0351/lab-creator.git"
+  },
+  "author": "mattdavis0351",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mattdavis0351/lab-creator/issues"
+  },
+  "homepage": "https://github.com/mattdavis0351/lab-creator#readme",
+  "dependencies": {
+    "chalk": "^4.1.1",
+    "commander": "^7.2.0",
+    "fs-extra": "^10.0.0"
+  }
+}
