@@ -5,7 +5,9 @@ const fs = require("fs-extra");
 const tmp = require("tmp-promise");
 const packageJSON = require("./package.json");
 const { spawn } = require("child_process");
+const { Octokit } = require("@octokit/rest");
 
+// nj.configure({ autoescape: false });
 async function init() {
   // Create new commander.Command()
   // command new-lab
@@ -13,12 +15,13 @@ async function init() {
   // lab-creator new-lab --lab-name bread
   const program = new commander.Command("lab-creator");
   // program metadata
-  program.version("0.0.1");
+  program.version(packageJSON.version);
 
   program
     .command("new-lab")
     .description("Create a new lab")
     .requiredOption("-l,--lab-name <lab-name>")
+    .option("-v,--lg-version <looking-glass-version>")
     .action(async (args) => {
       const tempPath = await makeTempDir();
       await makeWorkflowDir();
@@ -28,9 +31,23 @@ async function init() {
   program.parse(process.argv);
 }
 
-function fillInTemplates(templateDir, options) {
+async function getLookingGlassVersion() {
+  const octokit = new Octokit({
+    userAgent: "hands-on-lab scaffolding package",
+  });
+  const release = await octokit.rest.repos.getLatestRelease({
+    owner: "githubtraining",
+    repo: "looking-glass-action",
+  });
+  return release.data.tag_name;
+}
+
+async function fillInTemplates(templateDir, args) {
+  const lookingGlassVersion =
+    args.lgVersion || (await getLookingGlassVersion());
   const templateOptions = {
-    labName: options.labName,
+    labName: args.labName,
+    lookingGlassVersion: lookingGlassVersion,
   };
 
   const templateFiles = fs.readdirSync(`${templateDir}`);
@@ -46,6 +63,8 @@ function fillInTemplates(templateDir, options) {
     } else {
       fs.writeFileSync(`${process.cwd()}/${file}`, newContents, "utf8");
     }
+
+    fs.writeFileSync(`${process.cwd()}/.gitignore`, "node_modules", "utf8");
   });
 }
 
@@ -74,10 +93,10 @@ async function copyTemplateFiles(srcDir, args) {
     `${packageJSON.name}`,
   ]);
   npm.stdout.on("data", (d) => console.log(d.toString()));
-  npm.on("close", (code) => {
+  npm.on("close", async (code) => {
     if (code === 0) {
       // run our template function
-      fillInTemplates(
+      await fillInTemplates(
         `${srcDir.path}/node_modules/${packageJSON.name}/templates`,
         args
       );

@@ -11,17 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Grade scheduled events activity
+      - name: Grade {{ labName }} activity
         id: events
         uses: ./.github/actions/yaml-parser-action
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: {% raw %}${{secrets.GITHUB_TOKEN}}{% endraw %}
           files: "stale-weekly.yml"
-      - name: Troubleshooting info for grading
-        uses: githubtraining/looking-glass-action@507f3d308fd92b17b44dfdedd458a5c8854459c4
+      - name: Grading results
+        uses: githubtraining/looking-glass-action@{{ lookingGlassVersion }}
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          feedback: ${{ steps.events.outputs.reports }}
+          github-token: {% raw %}${{secrets.GITHUB_TOKEN}}{% endraw %}
+          feedback: {% raw %}${{ steps.events.outputs.reports }}{% endraw %}
   troubleshoot-activity:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
