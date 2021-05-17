@@ -2,6 +2,9 @@ const chalk = require("chalk");
 const commander = require("commander");
 const nj = require("nunjucks");
 const fs = require("fs-extra");
+const tmp = require("tmp-promise");
+const packageJSON = require("./package.json");
+const { spawn } = require("child_process");
 
 async function init() {
   // Create new commander.Command()
@@ -17,40 +20,32 @@ async function init() {
     .description("Create a new lab")
     .requiredOption("-l,--lab-name <lab-name>")
     .action(async (args) => {
+      const tempPath = await makeTempDir();
       await makeWorkflowDir();
-      fillInTemplates(
-        "/usr/local/lib/node_modules/lab-creator/templates",
-        args
-      );
+      await copyTemplateFiles(tempPath, args);
     });
 
   program.parse(process.argv);
 }
 
 function fillInTemplates(templateDir, options) {
-  // use nunjucks to fill in templates that are going to be copied
-  // write the filled in template to the filesystem
-  // create a new file and write it (so we don't change the template)
-  //   write that to the cwd
-  // put in separate function for readability
-  //   console.log(`args: ${args.labName}`);
-
-  const tmp = {
+  const templateOptions = {
     labName: options.labName,
   };
 
   const templateFiles = fs.readdirSync(`${templateDir}`);
   templateFiles.forEach((file) => {
     const contents = fs.readFileSync(`${templateDir}/${file}`).toString();
-    const newContents = nj.renderString(contents, tmp);
+    const newContents = nj.renderString(contents, templateOptions);
     if (file === "grading.yml") {
       fs.writeFileSync(
         `${process.cwd()}/.github/workflows/${file}`,
         newContents,
         "utf-8"
       );
+    } else {
+      fs.writeFileSync(`${process.cwd()}/${file}`, newContents, "utf8");
     }
-    fs.writeFileSync(`${process.cwd()}/${file}`, newContents, "utf8");
   });
 }
 
@@ -58,8 +53,36 @@ async function makeWorkflowDir() {
   try {
     await fs.ensureDir(`${process.cwd()}/.github/workflows`);
   } catch (err) {
-    console.error(err);
+    return err;
   }
 }
 
+async function makeTempDir() {
+  try {
+    const temp = await tmp.dir({ unsafeCleanup: true });
+    return temp;
+  } catch (err) {
+    return err;
+  }
+}
+
+async function copyTemplateFiles(srcDir, args) {
+  const npm = spawn("npm", [
+    "install",
+    "--prefix",
+    srcDir.path,
+    `${packageJSON.name}`,
+  ]);
+  npm.stdout.on("data", (d) => console.log(d.toString()));
+  npm.on("close", (code) => {
+    if (code === 0) {
+      // run our template function
+      fillInTemplates(
+        `${srcDir.path}/node_modules/${packageJSON.name}/templates`,
+        args
+      );
+    }
+  });
+  srcDir.cleanup();
+}
 module.exports = { init };

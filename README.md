@@ -13,3 +13,4 @@
   - [x] cli option/cmd that allows us to input a labs name
     - `lab-creator --name "my lab"`
   - [ ] future state is to update node_modules/@org/lab-creator/templates path for copying
+- [ ] push to npm
