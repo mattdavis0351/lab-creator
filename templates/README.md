@@ -20,16 +20,17 @@ This lab is an exercise to check your knowledge on scheduled events. It is autom
 
 ## Instructions
 
-In the `.github/workflows/stale-weekly.yml` you'll find a workflow that is intended to check for and close stale issues every Monday. The workflow is complete **except for** the `on:` key.
+<!-- Specific instructions for your lab -->
 
 Please complete the instructions below:
 
 1. Create your own copy of this repository by using the [Use this template](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template#creating-a-repository-from-a-template) button.
-2. On your repository, edit the `on:` key of the `stale-weekly.yml` workflow so that it contains a trigger to run every Monday.
+
+<!-- Add your steps below starting with step 2 -->
 
 ## Seeing your result
 
-Your lab is graded automatically once you have completed the instructions. To see the result of your lab, click the **Actions** tab, select the **Grading workflow**, and select the most recent workflow run. The status of the workflow indicates if you have passed or failed the lab.
+Your lab is graded automatically once you have completed the instructions. To see the result of your lab, <!-- specify expected Looking Glass display_type -->, <!-- specific place to look -->.
 
 If the workflow failed, scroll down to the **Annotations** section to check what went wrong.
 
@@ -48,7 +49,7 @@ Use these to help you!
 Resources specific to this lab:
 
 - [Events that trigger workflows - GitHub Docs]
-- [Cron examples - Crontab.guru]
+<!-- - Add further resources for the learner -->
 
 Resources for working with labs and GitHub Actions in general:
 
@@ -61,11 +62,11 @@ Resources for working with labs and GitHub Actions in general:
 <!--
 Links used throughout this README:
 -->
-
-[events that trigger workflows - github docs]: https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows#schedule
+<!-- Edit the links below to be relevant -->
+<!-- [events that trigger workflows - github docs]: https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows#schedule
 [cron examples - crontab.guru]: https://crontab.guru/examples.html
 [creating a repository from a template]: https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template
 [viewing workflow run history]: https://docs.github.com/en/actions/managing-workflow-runs/viewing-workflow-run-history
 [running a workflow on github]: https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow#running-a-workflow-on-github
 [about billing for github actions]: https://docs.github.com/en/github/setting-up-and-managing-billing-and-payments-on-github/about-billing-for-github-actions
-[github actions]: https://docs.github.com/en/actions
+[github actions]: https://docs.github.com/en/actions -->
