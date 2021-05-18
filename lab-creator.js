@@ -25,7 +25,7 @@ async function init() {
     .requiredOption("-a,--action-name <name-of-local-action>")
     .action(async (args) => {
       const tempPath = await makeTempDir();
-      await makeRequiredDirs();
+      await makeRequiredDirs(args);
       await copyTemplateFiles(tempPath, args);
     });
 
@@ -83,12 +83,10 @@ async function fillInTemplates(templateDir, args) {
   });
 }
 
-async function makeRequiredDirs() {
+async function makeRequiredDirs(args) {
   try {
     await fs.ensureDir(`${process.cwd()}/.github/workflows`);
-    await fs.ensureDir(
-      `${process.cwd}/.github/actions/${templateOptions.actionName}`
-    );
+    await fs.ensureDir(`${process.cwd}/.github/actions/${args.actionName}`);
   } catch (err) {
     return err;
   }
