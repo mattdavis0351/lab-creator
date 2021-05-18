@@ -1,6 +1,6 @@
 {
   "name": "lab-creator",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "scaffold github hands on labs",
   "main": "index.js",
   "bin": {
