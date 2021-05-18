@@ -68,17 +68,19 @@ async function fillInTemplates(templateDir, args) {
 
     fs.writeFileSync(`${process.cwd()}/.gitignore`, "node_modules", "utf8");
     fs.writeFileSync(
-      `${process.cwd}/.github/actions/${templateOptions.actionName}/action.yml`,
+      `${process.cwd()}/.github/actions/${
+        templateOptions.actionName
+      }/action.yml`,
       `name: ${templateOptions.actionName}`,
       "utf8"
     );
     fs.writeFileSync(
-      `${process.cwd}/.github/actions/${templateOptions.actionName}/main.js`,
+      `${process.cwd()}/.github/actions/${templateOptions.actionName}/main.js`,
       "const core = require('@actions/core')",
       "utf8"
     );
     fs.ensureDirSync(
-      `${process.cwd}/.github/actions/${templateOptions.actionName}/__tests__`
+      `${process.cwd()}/.github/actions/${templateOptions.actionName}/__tests__`
     );
   });
 }
@@ -86,7 +88,7 @@ async function fillInTemplates(templateDir, args) {
 async function makeRequiredDirs(args) {
   try {
     await fs.ensureDir(`${process.cwd()}/.github/workflows`);
-    await fs.ensureDir(`${process.cwd}/.github/actions/${args.actionName}`);
+    await fs.ensureDir(`${process.cwd()}/.github/actions/${args.actionName}`);
   } catch (err) {
     return err;
   }
