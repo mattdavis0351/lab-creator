@@ -32,16 +32,16 @@ async function init() {
   program.parse(process.argv);
 }
 
-async function getLookingGlassVersion() {
-  const octokit = new Octokit({
-    userAgent: "hands-on-lab scaffolding package",
-  });
-  const release = await octokit.rest.repos.getLatestRelease({
-    owner: "githubtraining",
-    repo: "looking-glass-action",
-  });
-  return release.data.tag_name;
-}
+// async function getLookingGlassVersion() {
+//   const octokit = new Octokit({
+//     userAgent: "hands-on-lab scaffolding package",
+//   });
+//   const release = await octokit.rest.repos.getLatestRelease({
+//     owner: "githubtraining",
+//     repo: "looking-glass-action",
+//   });
+//   return release.data.tag_name;
+// }
 
 async function fillInTemplates(templateDir, args) {
   const lookingGlassVersion =
@@ -124,18 +124,5 @@ async function copyTemplateFiles(srcDir, args) {
 }
 module.exports = { init };
 
-// recursively find all files in a directory
-// https://stackoverflow.com/questions/1724693/find-all-files-in-a-directory-tree-with-extension  
-function findFiles(dir) {
-  return fs.readdirSync(dir)
-    .map((file) => {
-      const filePath = `${dir}/${file}`;
-      if (fs.statSync(filePath).isDirectory()) {
-        return findFiles(filePath);
-      } else  {
-        return filePath;
-      }
-    })
-    .filter((file) => file !== undefined);
-}
+
 
