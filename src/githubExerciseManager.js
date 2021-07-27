@@ -1,6 +1,7 @@
 const commander = require("commander");
 const fs = require("fs-extra");
 const tmp = require("tmp-promise");
+const {spawn} = require("child_process");
 const packageJSON = require("../package.json");
 const getLatestLookingGlassVersion = require("./checkForUpdates");
 const findTemplateFiles = require("./findTemplateFiles");
@@ -33,10 +34,10 @@ async function createExercise(exerciseName, lgVersion,actionName){
         tests: []
     };
 
-    const tempPath = await tmp.dir({unsafeCleanup: true});
+    exercise.tempPath = await tmp.dir({unsafeCleanup: true});
     await makeRequiredDirs(exercise);
 
-    exercise.files = findTemplateFiles(`${tempPath.path}/node_modules/${packageJSON.name}/templates`)
+    exercise.files = findTemplateFiles(`${exercise.tempPath.path}/node_modules/${packageJSON.name}/templates`)
 
     return exercise;
 
@@ -52,7 +53,28 @@ async function makeRequiredDirs(exercise){
     }
 }
 
-init();
+// copy files from one location to another
+async function copyFiles(exercise){
+    // spawn npm and install into temp dir
+    
+    
+    const npm = spawn("npm", ["install","--prefix",exercises.tempPath.path,packageJSON.name]);
+    npm.stdout.on("data", (data) => {
+        console.log(data.toString());
+    });
+
+    npm.on("close", async (code) => {
+    if(code === 0){
+
+    
+    for(const file of exercise.files){
+        // const to = something
+        await fs.copy(file,to);
+        
+    }
+}});
+
+
 
 
 
