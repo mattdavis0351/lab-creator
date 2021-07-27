@@ -1,5 +1,5 @@
 const commander = require("commander");
-const { fstat } = require("fs-extra");
+const fs = require("fs-extra");
 const tmp = require("tmp-promise");
 const packageJSON = require("../package.json");
 const getLatestLookingGlassVersion = require("./checkForUpdates");
@@ -34,6 +34,7 @@ async function createExercise(exerciseName, lgVersion,actionName){
     };
 
     const tempPath = await tmp.dir({unsafeCleanup: true});
+    await makeRequiredDirs(exercise);
 
     exercise.files = findTemplateFiles(`${tempPath.path}/node_modules/${packageJSON.name}/templates`)
 
