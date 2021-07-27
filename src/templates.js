@@ -1,3 +1,5 @@
+const fs = require('fs-extra')
+
 // recursively find all files in a directory
 // returns an array of files
 function findFiles(dir) {
