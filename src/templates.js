@@ -2,7 +2,7 @@ const fs = require('fs-extra')
 
 // recursively find all files in a directory
 // returns an array of files
-function findFiles(dir) {
+function findTemplateFiles(dir) {
     return fs.readdirSync(dir)
       .map((file) => {
         const filePath = `${dir}/${file}`;
@@ -14,3 +14,5 @@ function findFiles(dir) {
       })
       .filter((file) => file !== undefined);
   }
+
+  module.exports = findTemplateFiles

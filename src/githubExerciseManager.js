@@ -1,6 +1,7 @@
 const commander = require("commander");
 const packageJSON = require("../package.json");
 const getLatestLookingGlassVersion = require("./checkForUpdates");
+const findTemplateFiles = require("./findTemplateFiles");
 
 async function init(){
     const program = new commander.Command("ghexmgr");
@@ -26,10 +27,18 @@ async function createExercise(exerciseName, lgVersion){
         files: [],
         tests: []
     };
+
+
+    exercise.files = findTemplateFiles(`${tempDir.path}/node_modules/${packageJSON.name}/templates`)
+
     return exercise;
+
 }
 
+
+
+// remove init once we have a working version
 init();
-}
+
 
 module.exports = {init};
