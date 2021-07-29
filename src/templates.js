@@ -44,6 +44,6 @@ function renderTemplates(exercise) {
 
 module.exports = {
   findTemplateFiles,
-  lattenTemplateFilesArray,
+  flattenTemplateFilesArray,
   renderTemplates,
 };
