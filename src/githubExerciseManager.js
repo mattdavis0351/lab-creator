@@ -4,7 +4,11 @@ const tmp = require("tmp-promise");
 const { spawn } = require("child_process");
 const packageJSON = require("../package.json");
 const getLatestLookingGlassVersion = require("./checkForUpdates");
-const findTemplateFiles,flattenTemplateFilesArray,renderTemplates = require("./templates");
+const {
+  findTemplateFiles,
+  flattenTemplateFilesArray,
+  renderTemplates,
+} = require("./templates");
 
 async function init() {
   const program = new commander.Command("ghexmgr");
