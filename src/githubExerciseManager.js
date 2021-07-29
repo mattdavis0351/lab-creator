@@ -4,7 +4,7 @@ const tmp = require("tmp-promise");
 const { spawn } = require("child_process");
 const packageJSON = require("../package.json");
 const getLatestLookingGlassVersion = require("./checkForUpdates");
-const findTemplateFiles,flattenTemplateFilesArray = require("./findTemplateFiles");
+const findTemplateFiles,flattenTemplateFilesArray,renderTemplates = require("./findTemplateFiles");
 
 async function init() {
   const program = new commander.Command("ghexmgr");
@@ -57,6 +57,8 @@ async function createExercise(exerciseName, lgVersion, actionName) {
 
   // flatten the templateFiles array and stroe in exercise.files
   exercise.files = flattenTemplateFilesArray(templateFiles);
+
+  renderTemplates(exercise);
 
   exercise.tempPath.cleanup();
   return exercise;

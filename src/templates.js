@@ -26,17 +26,18 @@ function flattenTemplateFilesArray(arr) {
 }
 // use nunjucks renderString to fill in contents of an array of files
 
-function renderTemplates(exercise, context) {
+function renderTemplates(exercise) {
   for (const file of exercise.files) {
-    const filePath = `${__dirname}/${file}`;
+    const filePath = `${file}`;
     const template = fs.readFileSync(filePath, "utf8");
-    const fileContent = nunjucks.renderString(template, context);
+    const fileContent = nunjucks.renderString(template);
     const newPath = path
       .parse(file)
       .dir.replace(
         `${exercise.tempPath.path}/node_modules/${packageJSON.name}/templates`,
         `${process.cwd()}`
       );
+    fs.ensureDirSync(newPath);
     fs.writeFileSync(newPath, fileContent);
   }
 }
