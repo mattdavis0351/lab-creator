@@ -1,7 +1,7 @@
 const commander = require("commander");
 const fs = require("fs-extra");
 const tmp = require("tmp-promise");
-const { spawn } = require("child_process");
+const { spawnSync } = require("child_process");
 const packageJSON = require("../package.json");
 const getLatestLookingGlassVersion = require("./checkForUpdates");
 const {
@@ -37,7 +37,9 @@ async function init() {
         lgVersion,
         actionName
       );
-      console.log(`Exercise ${exercise.name} created`);
+      console.log(
+        chalk.green(`Exercise ${exercise.name} is ready for an author 😄`)
+      );
     });
   program.parse(process.argv);
 }
@@ -50,28 +52,28 @@ async function createExercise(exerciseName, lgVersion, actionName) {
     files: [],
     tests: [],
   };
+  const tempPath = await tmp.dir({ unsafeCleanup: true });
+  exercise.tempPath = tempPath.path;
 
-  exercise.tempPath = await tmp.dir({ unsafeCleanup: true });
   await makeRequiredDirs(exercise);
 
   await npmInstall(exercise);
 
   const templateFiles = findTemplateFiles(
-    //   `${exercise.tempPath.path}/node_modules/${packageJSON.name}/templates`
-    `${exercise.tempPath.path}`
+    `${exercise.tempPath}/node_modules/${packageJSON.name}/templates`
   );
 
-  console.log(templateFiles);
   // flatten the templateFiles array and stroe in exercise.files
-  //   exercise.files = flattenTemplateFilesArray(templateFiles);
+  exercise.files = flattenTemplateFilesArray(templateFiles);
 
-  //   renderTemplates(exercise);
+  renderTemplates(exercise);
 
-  exercise.tempPath.cleanup();
+  tempPath.cleanup();
   return exercise;
 }
 
 async function makeRequiredDirs(exercise) {
+  console.log(chalk.green("Creating required directories..."));
   const requiredDirs = [
     `${process.cwd()}/.github/workflows`,
     `${process.cwd()}/.github/actions/${exercise.actionName}`,
@@ -84,24 +86,13 @@ async function makeRequiredDirs(exercise) {
 // copy files from one location to another
 async function npmInstall(exercise) {
   // spawn npm and install into temp dir
-  console.log(chalk.green("Installing dependencies"));
-  const npm = spawn("npm", [
+  console.log(chalk.green("Installing dependencies..."));
+  return spawnSync("npm", [
     "install",
     "--prefix",
-    `${exercise.tempPath.path}`,
+    exercise.tempPath,
     `${packageJSON.name}`,
   ]);
-
-  npm.stdout.on("data", (data) => {
-    console.log(data.toString());
-  });
-
-  npm.on("close", async (code) => {
-    if (code !== 0) {
-      console.log("npm install failed");
-      process.exit(code);
-    }
-  });
 }
 
 // remove init once we have a working version

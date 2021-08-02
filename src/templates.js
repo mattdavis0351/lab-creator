@@ -1,9 +1,13 @@
+const chalk = require("chalk");
 const fs = require("fs-extra");
 const path = require("path");
+const nunjucks = require("nunjucks");
+const packageJSON = require("../package.json");
 
 // recursively find all files in a directory
 // returns an array of files
 function findTemplateFiles(dir) {
+  console.log(chalk.green(`Searching for templates...`));
   return fs
     .readdirSync(dir)
     .map((file) => {
@@ -27,18 +31,22 @@ function flattenTemplateFilesArray(arr) {
 // use nunjucks renderString to fill in contents of an array of files
 
 function renderTemplates(exercise) {
+  console.log(chalk.green("Rendering templates with user options..."));
   for (const file of exercise.files) {
     const filePath = `${file}`;
+    console.log(chalk.blue(`current filepath ${filePath}`));
     const template = fs.readFileSync(filePath, "utf8");
     const fileContent = nunjucks.renderString(template);
+    console.log(path.parse(file));
     const newPath = path
       .parse(file)
       .dir.replace(
-        `${exercise.tempPath.path}/node_modules/${packageJSON.name}/templates`,
+        `${exercise.tempPath}/node_modules/${packageJSON.name}/templates`,
         `${process.cwd()}`
       );
     fs.ensureDirSync(newPath);
-    fs.writeFileSync(newPath, fileContent);
+    console.log(chalk.red(`current newpath: ${newPath}`));
+    // fs.writeFileSync(newPath, fileContent);
   }
 }
 
