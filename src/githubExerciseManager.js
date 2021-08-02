@@ -58,7 +58,9 @@ async function createExercise(exerciseName, lgVersion, actionName) {
   const templateFiles = findTemplateFiles(
     `${exercise.tempPath.path}/node_modules/${packageJSON.name}/templates`
   );
-
+  fs.readdirSync(`${exercise.tempPath.path}`).forEach((file) => {
+    console.log(file);
+  });
   // flatten the templateFiles array and stroe in exercise.files
   exercise.files = flattenTemplateFilesArray(templateFiles);
 
