@@ -9,6 +9,7 @@ const {
   flattenTemplateFilesArray,
   renderTemplates,
 } = require("./templates");
+const chalk = require("chalk");
 
 async function init() {
   const program = new commander.Command("ghexmgr");
@@ -58,6 +59,9 @@ async function createExercise(exerciseName, lgVersion, actionName) {
   const templateFiles = findTemplateFiles(
     `${exercise.tempPath.path}/node_modules/${packageJSON.name}/templates`
   );
+
+  //   use chalk to console log red text
+  console.log(chalk.red(`trying to read dir`));
   fs.readdirSync(`${exercise.tempPath.path}`).forEach((file) => {
     console.log(file);
   });
