@@ -35,7 +35,7 @@ function renderTemplates(exercise) {
   for (const file of exercise.files) {
     const filePath = `${file}`;
     const template = fs.readFileSync(filePath, "utf8");
-    const fileContent = nunjucks.renderString(template);
+    const fileContent = nunjucks.renderString(template, exercise);
     const newPath = path
       .parse(file)
       .dir.replace(
