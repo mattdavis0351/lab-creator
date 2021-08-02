@@ -13,7 +13,7 @@ function findTemplateFiles(dir) {
     .map((file) => {
       const filePath = `${dir}/${file}`;
       if (fs.statSync(filePath).isDirectory()) {
-        return findFiles(filePath);
+        return findTemplateFiles(filePath);
       } else {
         return filePath;
       }
