@@ -84,7 +84,7 @@ async function makeRequiredDirs(exercise) {
 // copy files from one location to another
 async function npmInstall(exercise) {
   // spawn npm and install into temp dir
-
+  console.log(chalk.green("Installing dependencies"));
   const npm = spawn("npm", [
     "install",
     "--prefix",
