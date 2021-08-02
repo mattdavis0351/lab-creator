@@ -64,9 +64,9 @@ async function createExercise(exerciseName, lgVersion, actionName) {
     console.log(file);
   });
   // flatten the templateFiles array and stroe in exercise.files
-  exercise.files = flattenTemplateFilesArray(templateFiles);
+  //   exercise.files = flattenTemplateFilesArray(templateFiles);
 
-  renderTemplates(exercise);
+  //   renderTemplates(exercise);
 
   exercise.tempPath.cleanup();
   return exercise;
