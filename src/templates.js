@@ -4,8 +4,6 @@ const path = require("path");
 // recursively find all files in a directory
 // returns an array of files
 function findTemplateFiles(dir) {
-  console.log(chalk.red(`trying to read temp dir`));
-
   return fs
     .readdirSync(dir)
     .map((file) => {

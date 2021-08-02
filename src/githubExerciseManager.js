@@ -56,9 +56,9 @@ async function createExercise(exerciseName, lgVersion, actionName) {
 
   await npmInstall(exercise);
 
-  const templateFiles = findTemplateFiles(
-    `${exercise.tempPath.path}/node_modules/${packageJSON.name}/templates`
-  );
+  //   const templateFiles = findTemplateFiles(
+  //     `${exercise.tempPath.path}/node_modules/${packageJSON.name}/templates`
+  //   );
 
   fs.readdirSync(`${exercise.tempPath.path}`).forEach((file) => {
     console.log(file);
