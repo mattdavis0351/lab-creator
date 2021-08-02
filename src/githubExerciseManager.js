@@ -95,7 +95,4 @@ async function npmInstall(exercise) {
   ]);
 }
 
-// remove init once we have a working version
-// init();
-
 module.exports = { init };

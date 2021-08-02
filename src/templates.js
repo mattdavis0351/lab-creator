@@ -34,10 +34,8 @@ function renderTemplates(exercise) {
   console.log(chalk.green("Rendering templates with user options..."));
   for (const file of exercise.files) {
     const filePath = `${file}`;
-    console.log(chalk.blue(`current filepath ${filePath}`));
     const template = fs.readFileSync(filePath, "utf8");
     const fileContent = nunjucks.renderString(template);
-    console.log(path.parse(file));
     const newPath = path
       .parse(file)
       .dir.replace(
@@ -45,7 +43,6 @@ function renderTemplates(exercise) {
         `${process.cwd()}`
       );
     fs.ensureDirSync(newPath);
-    console.log(chalk.red(`current newpath: ${newPath}`));
     fs.writeFileSync(`${newPath}/${path.parse(file).base}`, fileContent);
   }
 }
