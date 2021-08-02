@@ -7,7 +7,6 @@ const packageJSON = require("../package.json");
 // recursively find all files in a directory
 // returns an array of files
 function findTemplateFiles(dir) {
-  console.log(chalk.green(`Searching for templates...`));
   return fs
     .readdirSync(dir)
     .map((file) => {

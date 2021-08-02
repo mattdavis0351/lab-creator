@@ -58,7 +58,7 @@ async function createExercise(exerciseName, lgVersion, actionName) {
   await makeRequiredDirs(exercise);
 
   await npmInstall(exercise);
-
+  console.log(chalk.green(`Searching for templates...`));
   const templateFiles = findTemplateFiles(
     `${exercise.tempPath}/node_modules/${packageJSON.name}/templates`
   );
