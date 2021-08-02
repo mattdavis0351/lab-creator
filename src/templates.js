@@ -46,7 +46,7 @@ function renderTemplates(exercise) {
       );
     fs.ensureDirSync(newPath);
     console.log(chalk.red(`current newpath: ${newPath}`));
-    // fs.writeFileSync(newPath, fileContent);
+    fs.writeFileSync(`${newPath}/${path.parse(file).base}`, fileContent);
   }
 }
 
