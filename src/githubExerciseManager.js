@@ -56,13 +56,12 @@ async function createExercise(exerciseName, lgVersion, actionName) {
 
   await npmInstall(exercise);
 
-  //   const templateFiles = findTemplateFiles(
-  //     `${exercise.tempPath.path}/node_modules/${packageJSON.name}/templates`
-  //   );
+  const templateFiles = findTemplateFiles(
+    //   `${exercise.tempPath.path}/node_modules/${packageJSON.name}/templates`
+    `${exercise.tempPath.path}`
+  );
 
-  fs.readdirSync(`${exercise.tempPath.path}`).forEach((file) => {
-    console.log(file);
-  });
+  console.log(templateFiles);
   // flatten the templateFiles array and stroe in exercise.files
   //   exercise.files = flattenTemplateFilesArray(templateFiles);
 
