@@ -1,6 +1,7 @@
 const commander = require("commander");
 const fs = require("fs-extra");
 const tmp = require("tmp-promise");
+const chalk = require("chalk");
 const { spawnSync } = require("child_process");
 const packageJSON = require("../package.json");
 const getLatestLookingGlassVersion = require("./checkForUpdates");
@@ -9,7 +10,7 @@ const {
   flattenTemplateFilesArray,
   renderTemplates,
 } = require("./templates");
-const chalk = require("chalk");
+const { bootstrapRepository } = require("./githubRepository");
 
 async function init() {
   const program = new commander.Command("ghexmgr");
@@ -17,38 +18,70 @@ async function init() {
   program
     .command("new-exercise")
     .description("Create a new exercise")
-    .requiredOption("-n,--exercise-name <exercise-name>")
+    .arguments("<exercise-title>")
+    .usage(
+      `${chalk.green("<exercise-title>")} ${chalk.blueBright("[options]")}`
+    )
     .option(
-      "-v,--lg-version <looking-glass-version>",
+      "-v, --lg-version <looking-glass-version>",
       "Looking Glass version you wish to use in the grading.yml exercise file",
       await getLatestLookingGlassVersion()
     )
     .option(
-      "-a,--action-name <local-action-name>",
+      "-a, --action-name <local-action-name>",
       "User defined name for the local action of the exercise",
       "local-action"
     )
-    .action(async (options) => {
-      const exerciseName = options.exerciseName;
-      const lgVersion = options.lgVersion;
-      const actionName = options.actionName;
-      const exercise = await createExercise(
-        exerciseName,
-        lgVersion,
-        actionName
-      );
+    .option(
+      "-o, --github-owner <github-repository-owner>",
+      "Username or organization that has ownership of the desired exercise repository"
+    )
+    .option(
+      "-p, --project-path <project-path>",
+      "Path where the exercise will be created",
+      "Current directory"
+    )
+    .option(
+      "-r, --github-repository <github-repository-name>",
+      "Name of the exercise repository"
+    )
+    .action(async (exerciseTitle, options) => {
+      //   const exerciseName = options.exerciseName;
+      //   const exerciseName = name;
+      //   const lgVersion = options.lgVersion;
+      //   const actionName = options.actionName;
+      //   const githubOwner = options.githubOwner;
+      //   const githubRepository = options.githubRepository;
+      //   const projectPath = options.projectPath;
+      const exercise = await createExercise(exerciseTitle, options);
+
+      //   const repository = await bootstrapRepository(
+      //     githubOwner,
+      //     githubRepository
+      //   );
+
       console.log(
-        chalk.green(`Exercise ${exercise.name} is ready for an author 😄`)
+        chalk.green(`Exercise ${exercise.title} is ready for you 😄`)
       );
     });
   program.parse(process.argv);
 }
 
-async function createExercise(exerciseName, lgVersion, actionName) {
+async function create(title, opts) {
+  return {
+    ...opts,
+    title,
+    tmp: await tmp.dir({ unsafeCleanup: true }),
+    files: [],
+  };
+}
+
+async function createExercise(exerciseTitle, options) {
   const exercise = {
-    name: exerciseName,
-    lgVersion: lgVersion,
-    actionName: actionName,
+    ...options,
+    title: exerciseTitle,
+    // lgVersion: lgVersion,
+    // actionName: actionName,
     files: [],
     tests: [],
   };
