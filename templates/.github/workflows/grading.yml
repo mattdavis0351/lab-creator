@@ -7,16 +7,17 @@ on:
 
 jobs:
   grade-learner:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' # Apply additional filters as needed
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Grade {{ labName }} activity
+
+      - name: Grade {{ exerciseName }} activity
         id: events
-        uses: ./.github/actions/yaml-parser-action
+        uses: ./.github/actions/{{actionName}}
         with:
           github-token: {% raw %}${{secrets.GITHUB_TOKEN}}{% endraw %}
-          files: "stale-weekly.yml"
+
       - name: Grading results
         uses: githubtraining/looking-glass-action@{{ lookingGlassVersion }}
         with:
@@ -27,4 +28,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: troubleshooting steps
-        run: echo "To get started, change the on field in stale-weekly.yml."
+        run: echo "" #Help the user to troubleshoot the activity

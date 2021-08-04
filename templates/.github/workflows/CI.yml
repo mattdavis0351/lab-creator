@@ -6,7 +6,7 @@ on:
 
 jobs:
   run-tests:
-    if: github.repository == 'githubtraining/lab-{{ labName }}'
+    if: github.repository == '{{githubOwner}}/{{githubRepository}}'
     runs-on: ubuntu-latest
     defaults:
       run:

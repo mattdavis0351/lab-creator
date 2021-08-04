@@ -1,1 +1,11 @@
-name: { { actionName } }
+name: "{{ actionname }}"
+description: Grading action for local exercise
+author: githubtraining
+inputs:
+  token:
+    description: GITHUB_TOKEN used to access the API
+    required: true
+
+runs:
+  using: node12
+  main: "dist/index.js"
