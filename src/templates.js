@@ -32,18 +32,34 @@ function flattenTemplateFilesArray(arr) {
 function renderTemplates(exercise) {
   console.log(chalk.green("Rendering templates with user options..."));
   for (const file of exercise.files) {
-    const filePath = `${file}`;
-    const template = fs.readFileSync(filePath, "utf8");
+    const template = fs.readFileSync(file, "utf8");
     const fileContent = nunjucks.renderString(template, exercise);
+    console.log(file);
+    const np = file.includes(".github/actions/local-action")
+      ? path
+          .parse(file)
+          .dir.replace(
+            `${exercise.tmp.name}/node_modules/${packageJSON.name}/templates/.github/actions/local-action`,
+            `${process.cwd()}/.github/actions/${exercise.actionName}`
+          )
+      : path
+          .parse(file)
+          .dir.replace(
+            `${exercise.tmp.name}/node_modules/${packageJSON.name}/templates`,
+            `${process.cwd()}`
+          );
+
+    console.log(np);
     const newPath = path
       .parse(file)
       .dir.replace(
-        `${exercise.tempPath}/node_modules/${packageJSON.name}/templates`,
+        `${exercise.tmp.name}/node_modules/${packageJSON.name}/templates`,
         `${process.cwd()}`
       );
-    fs.ensureDirSync(newPath);
-    fs.writeFileSync(`${newPath}/${path.parse(file).base}`, fileContent);
+    fs.ensureDirSync(np);
+    fs.writeFileSync(`${np}/${path.parse(file).base}`, fileContent);
   }
+  console.log(chalk.green("Rendering templates with user options...Done"));
 }
 
 module.exports = {

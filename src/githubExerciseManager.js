@@ -1,16 +1,11 @@
 const commander = require("commander");
-const fs = require("fs-extra");
-const tmp = require("tmp-promise");
 const chalk = require("chalk");
-const { spawnSync } = require("child_process");
 const packageJSON = require("../package.json");
-const getLatestLookingGlassVersion = require("./checkForUpdates");
-const {
-  findTemplateFiles,
-  flattenTemplateFilesArray,
-  renderTemplates,
-} = require("./templates");
+
+const { getLatestLookingGlassVersion } = require("./checkForUpdates");
+const { renderTemplates } = require("./templates");
 const { bootstrapRepository } = require("./githubRepository");
+const { createExercise, makeRequiredDirs } = require("./utils");
 
 async function init() {
   const program = new commander.Command("ghexmgr");
@@ -46,86 +41,27 @@ async function init() {
       "Name of the exercise repository"
     )
     .action(async (exerciseTitle, options) => {
-      //   const exerciseName = options.exerciseName;
-      //   const exerciseName = name;
-      //   const lgVersion = options.lgVersion;
-      //   const actionName = options.actionName;
-      //   const githubOwner = options.githubOwner;
-      //   const githubRepository = options.githubRepository;
-      //   const projectPath = options.projectPath;
       const exercise = await createExercise(exerciseTitle, options);
+      await makeRequiredDirs(exercise);
 
-      //   const repository = await bootstrapRepository(
-      //     githubOwner,
-      //     githubRepository
-      //   );
+      renderTemplates(exercise);
 
+      if (exercise.githubOwner && exercise.githubRepository) {
+        await bootstrapRepository(exercise);
+      } else if (exercise.githubOwner || exercise.githubRepository) {
+        console.log(
+          chalk.bold.red(
+            `Skipping Git initialization and configuration!\nYou must provide both --github-owner and --github-repository.\nYou can still configure your project directory manually.`
+          )
+        );
+      }
+      console.log();
       console.log(
         chalk.green(`Exercise ${exercise.title} is ready for you 😄`)
       );
+      exercise.tmp.removeCallback();
     });
   program.parse(process.argv);
 }
 
-async function create(title, opts) {
-  return {
-    ...opts,
-    title,
-    tmp: await tmp.dir({ unsafeCleanup: true }),
-    files: [],
-  };
-}
-
-async function createExercise(exerciseTitle, options) {
-  const exercise = {
-    ...options,
-    title: exerciseTitle,
-    // lgVersion: lgVersion,
-    // actionName: actionName,
-    files: [],
-    tests: [],
-  };
-  const tempPath = await tmp.dir({ unsafeCleanup: true });
-  exercise.tempPath = tempPath.path;
-
-  await makeRequiredDirs(exercise);
-
-  await npmInstall(exercise);
-  console.log(chalk.green(`Searching for templates...`));
-  const templateFiles = findTemplateFiles(
-    `${exercise.tempPath}/node_modules/${packageJSON.name}/templates`
-  );
-
-  // flatten the templateFiles array and stroe in exercise.files
-  exercise.files = flattenTemplateFilesArray(templateFiles);
-
-  renderTemplates(exercise);
-
-  tempPath.cleanup();
-  return exercise;
-}
-
-async function makeRequiredDirs(exercise) {
-  console.log(chalk.green("Creating required directories..."));
-  const requiredDirs = [
-    `${process.cwd()}/.github/workflows`,
-    `${process.cwd()}/.github/actions/${exercise.actionName}`,
-  ];
-  for (const dir of requiredDirs) {
-    await fs.ensureDir(dir);
-  }
-}
-
-// copy files from one location to another
-async function npmInstall(exercise) {
-  // spawn npm and install into temp dir
-  console.log(chalk.green("Installing dependencies..."));
-  return spawnSync("npm", [
-    "install",
-    "--prefix",
-    exercise.tempPath,
-    `${packageJSON.name}`,
-  ]);
-}
-
-module.exports = { init };
+module.exports = { init, createExercise };
