@@ -41,6 +41,7 @@ async function init() {
       "Name of the exercise repository"
     )
     .action(async (exerciseTitle, options) => {
+      console.log(options);
       const exercise = await createExercise(exerciseTitle, options);
       await makeRequiredDirs(exercise);
 

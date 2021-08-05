@@ -19,7 +19,7 @@ jobs:
           github-token: {% raw %}${{secrets.GITHUB_TOKEN}}{% endraw %}
 
       - name: Grading results
-        uses: githubtraining/looking-glass-action@{{ lookingGlassVersion }}
+        uses: githubtraining/looking-glass-action@{{ lgVersion }}
         with:
           github-token: {% raw %}${{secrets.GITHUB_TOKEN}}{% endraw %}
           feedback: {% raw %}${{ steps.events.outputs.reports }}{% endraw %}
