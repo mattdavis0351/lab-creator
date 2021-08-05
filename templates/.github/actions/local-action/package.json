@@ -1,5 +1,5 @@
 {
-  "name": "{{ actionname }}",
+  "name": "{{ actionName }}",
   "version": "1.0.0",
   "description": "Local exercise action to verify the desire commit was removed",
   "main": "index.js",

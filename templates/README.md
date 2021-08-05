@@ -1,4 +1,4 @@
-# Welcome to the {{ exerciseName }} exercise!
+# Welcome to the {{ title }} exercise!
 
 This exercise checks FILL THIS IN. It is automatically graded via a workflow once you have completed the instructions.
 

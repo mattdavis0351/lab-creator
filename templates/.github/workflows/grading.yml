@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Grade {{ exerciseName }} activity
+      - name: Grade {{ title }} activity
         id: events
         uses: ./.github/actions/{{actionName}}
         with:

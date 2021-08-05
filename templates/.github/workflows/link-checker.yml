@@ -5,7 +5,7 @@ on: push
 jobs:
   markdown-link-check:
     runs-on: ubuntu-latest
-    if: github.repository == 'githubtraining/exercise-{{ exerciseName }}'
+    if: github.repository == 'githubtraining/exercise-{{ title }}'
     steps:
       - uses: actions/checkout@master
       - uses: gaurav-nelson/github-action-markdown-link-check@v1

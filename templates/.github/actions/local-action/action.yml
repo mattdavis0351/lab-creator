@@ -1,4 +1,4 @@
-name: "{{ actionname }}"
+name: "{{ actionName }}"
 description: Grading action for local exercise
 author: githubtraining
 inputs:
